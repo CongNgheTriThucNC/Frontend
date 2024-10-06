@@ -1,5 +1,8 @@
+import RouteComponent from "./routes/routes";
+
 function App() {
-    return <div className="App">hello world</div>;
+    const routeElement = RouteComponent();
+    return <div>{routeElement}</div>;
 }
 
 export default App;
