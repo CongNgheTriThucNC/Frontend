@@ -18,9 +18,7 @@ export default function Home() {
             <Category />
             <Featured />
             <Compaines />
-
             <Testimonial />
-
             <Beecome />
         </div>
     )

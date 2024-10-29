@@ -258,9 +258,9 @@ const JobDetails = memo(() => {
             <div className="job-details-related">
                 <h2>Related Jobs</h2>
                 <div className="job-related">
-                    <JobItem />
-                    <JobItem />
-                    <JobItem />
+                    <JobItem link="/job-details" />
+                    <JobItem link="/job-details" />
+                    <JobItem link="/job-details" />
                 </div>
             </div>
             <Modal
