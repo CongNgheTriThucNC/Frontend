@@ -1,41 +1,21 @@
 .wrapperfotter {
     display: flex;
-    justify-content: space-around;
-    gap: 24px;
-    align-items: center;
-}
-
-.boxft {
-    display: flex;
-    gap: 12px;
-    flex-direction: column;
-}
-
-.title {
-    font-size: 20px;
-    font-weight: 500;
-    line-height: 32px;
-    text-align: left;
-    color: #FFFFFF !important;
-    display: flex;
-    gap: 24px;
-    align-items: center;
-}
-
-.call {
-    color: #5E6670;
-    font-size: 18px;
-    font-weight: 400;
-    line-height: 28px;
-    text-align: left;
-
-}
-
-.adress {
-    color: #767F8C;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 20px;
-    text-align: left;
-
-}
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .boxft .title {
+    margin-bottom: 8px;
+  }
+  
+  .boxft .link,
+  .boxft .call,
+  .boxft .address {
+    margin-top: 4px;
+    color: #b0b0b0;
+  }
+  
+  .boxft .link:hover {
+    color: #ffffff;
+  }
+  

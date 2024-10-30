@@ -4,8 +4,7 @@ import { FaArrowRight } from 'react-icons/fa'
 
 export default function Category() {
   return (
-    <div className='canchinh  '>
-     <div className="w-1320 mx-auto">
+    <div className="px-[300px]  bg-blur py-20">
      <div className='flex justify-between items-center'>
         <h2 className='font-bold text-2xl '>Popular category</h2>
         <div className='flex gap-4 items-center'>
@@ -26,6 +25,5 @@ export default function Category() {
         <Boxcategory />
       </div>
      </div>
-    </div>
   )
 }

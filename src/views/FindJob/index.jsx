@@ -6,7 +6,8 @@ import { IconSearch } from '../../assets/icons/IconSearch';
 import { IconLocation } from '../../assets/icons/IconLocation';
 import { IconStack } from '../../assets/icons/IconStack';
 import JobItem from '../../components/JobItem/JobItem';
-
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 const FindJob = memo(() => {
     const [experienceValue, setExperienceValue] = useState();
     const [salary, setSalary] = useState();
@@ -182,7 +183,7 @@ const FindJob = memo(() => {
                     className="find-job-title"
                 >
                     <Typography.Title level={3}>Find Job</Typography.Title>
-                    <span>Home/Find Job</span>
+                    {/* <span>Home/Find Job</span> */}
                 </Flex>
                 <div className="find-job-details">
                     <Form
@@ -296,6 +297,12 @@ const FindJob = memo(() => {
                 <JobItem link="/job-details" />
                 <JobItem link="/job-details" />
             </div>
+            <div className="flex justify-center items-center">
+                <Stack spacing={2}>
+                    <Pagination count={10} variant="outlined" shape="rounded" />
+                </Stack>
+</div>
+ 
         </>
     );
 });
