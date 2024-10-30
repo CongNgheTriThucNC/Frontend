@@ -7,7 +7,7 @@ import Orthodontists from "../Anesthesiologists/Orthodontists";
 export default function Popular() {
   return (
     <div className="canchinh">
-    <div className="w-1320 mx-auto">
+    <div className="w-[1280px] mx-auto bg-blur py-20">
     <h1 className="font-bold text-3xl my-3">Most Popular Vacancies</h1>
       <div className="">
         <div className="flex  justify-between mt-5">

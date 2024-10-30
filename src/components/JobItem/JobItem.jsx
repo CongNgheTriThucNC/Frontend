@@ -3,10 +3,13 @@ import React, { memo } from 'react';
 import { IconReddit } from '../../assets/icons/IconReddit';
 import { LocationIcon } from '../../assets/icons/LocationIcon';
 import './jobItem.scss';
+import { useNavigate } from 'react-router-dom';
 
-const JobItem = memo(() => {
+const JobItem = memo(({ link }) => {
+    const navigate = useNavigate();
+
     return (
-        <div className="job-item">
+        <div className="job-item" onClick={() => navigate(link)}>
             <Flex gap={8} align="center" className="job-item-info">
                 <IconReddit />
                 <Flex vertical gap={12}>

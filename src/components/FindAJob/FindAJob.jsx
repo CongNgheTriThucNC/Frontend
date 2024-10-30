@@ -3,17 +3,17 @@ import BoxFindJob from "../BoxFindJob/BoxFindJob";
 
 export default function FindAJob() {
   return (
-    <div className="px-[300px]  bg-blur py-20">
+    <div className="w-[1280px] mx-auto bg-blur py-20">
       <div className="flex gap-12  justify-between items-center">
         <div>
           <div className="text-3xl font-medium tracking-wider w-80">
             Find a job that suits your interest & skills.
           </div>
-          <div className="tracking-tighter text-sm w-96">
+          <div className="tracking-tighter mt-10 text-sm w-96">
             Aliquam vitae turpis in diam convallis finibus in at risus. <br />
             Nullam in scelerisque leo, eget sollicitudin velit bestibulum.
           </div>
-          <div className="flex gap-4 items-center ">
+          <div className="flex gap-4 mt-10 items-center ">
             <input
               className="p-2 border border-sky-100"
               placeholder="Job tittle, Keyword..."

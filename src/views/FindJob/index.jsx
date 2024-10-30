@@ -172,7 +172,7 @@ const FindJob = memo(() => {
     const toggleDropdown = useCallback(() => {
         setDropdownVisible(prev => !prev);
     }, []);
-    
+
     return (
         <>
             <div className="find-job">
@@ -286,15 +286,15 @@ const FindJob = memo(() => {
                 </div>
             </div>
             <div className="find-job-alls">
-                <JobItem />
-                <JobItem />
-                <JobItem />
-                <JobItem />
-                <JobItem />
-                <JobItem />
-                <JobItem />
-                <JobItem />
-                <JobItem />
+                <JobItem link="/job-details" />
+                <JobItem link="/job-details" />
+                <JobItem link="/job-details" />
+                <JobItem link="/job-details" />
+                <JobItem link="/job-details" />
+                <JobItem link="/job-details" />
+                <JobItem link="/job-details" />
+                <JobItem link="/job-details" />
+                <JobItem link="/job-details" />
             </div>
         </>
     );

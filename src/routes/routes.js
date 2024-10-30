@@ -9,6 +9,8 @@ import Register from '../views/Register';
 import ResetPassword from '../views/ResetPassword';
 import JobDetails from '../views/JobDetails';
 import Home from '../views/Home/home';
+import Profile from '../views/Profile';
+import FindEmpoyee from '../components/FindEmpoyee';
 
 export default function RouteComponent() {
     const routeElements = useRoutes([
@@ -16,7 +18,7 @@ export default function RouteComponent() {
             path: '/',
             element: (
                 <FindJobLayout>
-  <Home />
+                    <Home />
                 </FindJobLayout>
              
             ),
@@ -62,10 +64,26 @@ export default function RouteComponent() {
             )
         },
         {
+            path: '/find-employer',
+            element: (
+                <FindJobLayout>
+                    <FindEmpoyee />
+                </FindJobLayout>
+            )
+        },
+        {
             path: '/job-details',
             element: (
                 <FindJobLayout>
                     <JobDetails />
+                </FindJobLayout>
+            ),
+        },
+        {
+            path: '/profile-page',
+            element: (
+                <FindJobLayout>
+                    <Profile />
                 </FindJobLayout>
             ),
         },
