@@ -7,21 +7,19 @@ const UserContext = createContext(null);
 export const useUser = () => useContext(UserContext);
 
 export const UserProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [token, setToken] = useState('');
+    const [user, setUser] = useState(() => {
+        // Tải dữ liệu user từ cookie lúc đầu
+        const savedUser = Cookies.get('user');
+        return savedUser ? JSON.parse(savedUser) : null;
+    });
+    const [token, setToken] = useState(() => Cookies.get('token') || '');
 
     useEffect(() => {
         const fetchUserData = async () => {
-            // Khôi phục token từ cookie
-            const savedToken = Cookies.get('token');
-            if (savedToken) {
-                setToken(savedToken);
-            }
-
-            if (!user) {
+            if (!user && token) {
                 try {
                     const response = await getMe();
-                    handleSetUser(response.data); // Sử dụng dữ liệu từ phản hồi API
+                    handleSetUser(response.data); // Gọi handleSetUser để cập nhật user vào cookie
                 } catch (error) {
                     console.error('Error fetching user data:', error);
                 }
@@ -29,15 +27,18 @@ export const UserProvider = ({ children }) => {
         };
 
         fetchUserData();
-    }, [user]); // Gọi lại API khi `user` là null
+    }, [user, token]);
 
     const handleSetUser = (userData) => {
-        const user = {
+        const newUser = {
+            id: userData._id,
             username: userData.username,
             profilePicture: userData.profilePicture || '',
+            email: userData.email || '',
+            bio: userData.bio || '',
         };
-        setUser(user);
-        Cookies.set('user', JSON.stringify(user)); // Lưu user vào cookie
+        setUser(newUser);
+        Cookies.set('user', JSON.stringify(newUser)); // Lưu user vào cookie
     };
 
     const handleSetToken = (tokenData) => {
