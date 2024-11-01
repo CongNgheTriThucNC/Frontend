@@ -5,7 +5,7 @@ import { LocationIcon } from '../../assets/icons/LocationIcon';
 import './jobItem.scss';
 import { useNavigate } from 'react-router-dom';
 
-const JobItem = memo(({ link }) => {
+const JobItem = memo(({ link, job }) => { // Add job prop
     const navigate = useNavigate();
 
     return (
@@ -14,21 +14,22 @@ const JobItem = memo(({ link }) => {
                 <IconReddit />
                 <Flex vertical gap={12}>
                     <Flex align="center" gap={4}>
-                        <h3 className="title">Reddit</h3>
-                        <span className="featured">Featured</span>
+                        <h3 className="title">{job.JobTitle}</h3> {/* Job Title */}
+                        <span className="featured">{job.CareerLevel}</span> {/* Career Level or any other relevant tag */}
                     </Flex>
                     <Flex gap={4} align="center" className="location">
                         <LocationIcon />
-                        United Kingdom of Great Britain
+                        {job.JobAddress} {/* Job Address */}
                     </Flex>
                 </Flex>
             </Flex>
-            <h3 className="job-item-title">Marketing Officer</h3>
+            <h3 className="job-item-title">{job.JobTitle}</h3> {/* Job Title */}
             <Flex className="job-item-details">
-                <span>Full time</span>
-                <span>$30K-$35K</span>
+                <span>{job.JobType}</span> {/* Job Type */}
+                <span>{job.Salary}</span> {/* Salary */}
             </Flex>
         </div>
     );
 });
+
 export default JobItem;

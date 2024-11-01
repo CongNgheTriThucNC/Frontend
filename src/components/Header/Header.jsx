@@ -10,12 +10,10 @@ import Logo from '../../assets/icons/Logo';
 import './header.scss';
 import { useUser } from '../../context';
 import { useNavigate } from 'react-router-dom';
-// import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
 const Header = memo(() => {
     const { user, logout } = useUser();
-    
     const navigate = useNavigate();
 
     const handleProfileClick = () => {
@@ -24,6 +22,10 @@ const Header = memo(() => {
         } else {
             navigate('/profile-page');
         }
+    };
+    const handleLogout = () => {
+        logout();  // Clear user session and token
+        navigate('/');  // Redirect to home page
     };
 
     return (
@@ -72,9 +74,8 @@ const Header = memo(() => {
                     <Button className="mx-6 flex items-center h-8 hover:h-full" variant="outlined">{user ? user.username : 'Login'}</Button>
                 </div>
                 {user && (
-                    
                     <div className='flex items-center'>
-                        <Button className='flex items-center h-8 hover:h-full' variant="outlined" onClick={logout} >Logout</Button>
+                        <Button className='flex items-center h-8 hover:h-full' variant="outlined" onClick={handleLogout} >Logout</Button>
                     </div>
                 )}
             </Flex>
