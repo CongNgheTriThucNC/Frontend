@@ -8,16 +8,28 @@ import { IconSearch } from '../../assets/icons/IconSearch';
 import { IndiaFlag } from '../../assets/icons/IndiaFlag';
 import Logo from '../../assets/icons/Logo';
 import './header.scss';
+import { useUser } from '../../context';
+import { useNavigate } from 'react-router-dom';
+// import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 
 const Header = memo(() => {
+    const { user, logout } = useUser();
+    
+    const navigate = useNavigate();
+
+    const handleProfileClick = () => {
+        if (!user) {
+            navigate('/login');
+        } else {
+            navigate('/profile-page');
+        }
+    };
+
     return (
         <>
             <div className="header">
-                <Flex
-                    align="center"
-                    justify="space-between"
-                    className="header-top"
-                >
+                <Flex align="center" justify="space-between" className="header-top">
                     <Flex align="center" gap={24} className="left-content">
                         <Link to="/">Home</Link>
                         <Link to="/find-job">Find Job</Link>
@@ -47,14 +59,24 @@ const Header = memo(() => {
                             <span>India</span>
                         </Flex>
                         <Input
-                            placeholder="Job tittle, keyword, company"
+                            placeholder="Job title, keyword, company"
                             prefix={<IconSearch />}
                         />
                     </Flex>
                 </Flex>
-                <Link to="/profile-page">
-                    <Avatar size={48} icon={<UserOutlined />} />
-                </Link> 
+                <div 
+                    onClick={handleProfileClick} 
+                    className="flex items-center cursor-pointer p-2 hover:bg-gray-100 rounded transition duration-150"
+                >
+                    <Avatar className='mr-2' size={48} src={user?.profilePicture || <UserOutlined />} />
+                    <Button className="mx-6 flex items-center h-8 hover:h-full" variant="outlined">{user ? user.username : 'Login'}</Button>
+                </div>
+                {user && (
+                    
+                    <div className='flex items-center'>
+                        <Button className='flex items-center h-8 hover:h-full' variant="outlined" onClick={logout} >Logout</Button>
+                    </div>
+                )}
             </Flex>
         </>
     );
