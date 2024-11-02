@@ -2,7 +2,7 @@
 
 .job-item {
     background-color: #fff;
-    padding: 12px;
+    padding: 12px 16px;
     border-radius: 12px;
     box-shadow: 0 20px 25px -5px $color-shadow1, 0 8px 10px -6px $color-shadow1;
     
@@ -15,10 +15,10 @@
     &-info {
         margin-bottom: 16px;
         .title {
-            font-size: 16px;
+            font-size: 14px;
         }
         .featured {
-            font-size: 14px;
+            font-size: 10px;
             color: #ff4f4f;
             display: inline-block;
             padding: 4px 8px;
@@ -27,17 +27,17 @@
         }
         .location {
             color: #939aad;
-            font-size: 14px;
+            font-size: 12px;
         }
     }
     &-title {
         font-weight: 500;
-        font-size: 20px;
+        font-size: 14px;
         margin-bottom: 8px;
         transition: all 0.2s linear;
     }
     &-details {
-        font-size: 13px;
+        font-size: 12px;
         color: #636a80;
         span {
             display: inline-block;
@@ -45,8 +45,8 @@
             position: relative;
             &:first-child::after {
                 content: '';
-                width: 6px;
-                height: 6px;
+                width: 8px;
+                height: 8px;
                 border-radius: 50%;
                 background-color: #636a80;
                 position: absolute;

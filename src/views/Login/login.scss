@@ -18,10 +18,12 @@
     }
     .ant-input,
     .ant-input-password {
+        height: 42px;
         padding: 6px 11px;
         font-size: 14px;
         color: $color-date;
         font-weight: 500;
+        align-items: center;
     }
     .ant-form-item {
         margin-bottom: 16px;
