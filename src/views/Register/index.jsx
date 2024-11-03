@@ -99,6 +99,7 @@ import React, { memo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './register.scss';
+import { BASE_URL } from '../../service/Apis/request';
 
 const Register = memo(() => {
     const navigate = useNavigate();
@@ -106,14 +107,13 @@ const Register = memo(() => {
     const onFinish = async (values) => {
         try {
             const { username, email, password } = values;
-            const response = await axios.post('http://localhost:4000/api/auth/register', {
+            const response = await axios.post(BASE_URL + '/auth/register', {
                 username,
                 email,
                 password,
             });
 
             if (response.status === 200) {
-                console.log('Registration successful:', response.data);
                 navigate('/login'); 
             }
         } catch (error) {

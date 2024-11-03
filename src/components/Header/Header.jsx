@@ -2,10 +2,9 @@ import { UserOutlined } from '@ant-design/icons';
 import { Avatar, Flex, Input } from 'antd';
 import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
-import { AmericanFlag } from '../../assets/icons/AmericanFlag';
 import { IconPhone } from '../../assets/icons/IconPhone';
 import { IconSearch } from '../../assets/icons/IconSearch';
-import { IndiaFlag } from '../../assets/icons/IndiaFlag';
+import { VietnamFlag } from '../../assets/icons/IndiaFlag';
 import Logo from '../../assets/icons/Logo';
 import './header.scss';
 import { useUser } from '../../context';
@@ -43,11 +42,11 @@ const Header = memo(() => {
                     <Flex align="center" gap={24} className="right-content">
                         <Flex align="center" gap={8}>
                             <IconPhone />
-                            <span>+1-202-555-0178</span>
+                            <span>0766748566</span>
                         </Flex>
                         <Flex align="center" gap={8}>
-                            <AmericanFlag />
-                            <span>English</span>
+                            <VietnamFlag />
+                            <span>  </span>
                         </Flex>
                     </Flex>
                 </Flex>
@@ -57,8 +56,8 @@ const Header = memo(() => {
                     <Logo />
                     <Flex align="center" className="search-wrapper">
                         <Flex align="center" gap={8} className="flag-wrapper">
-                            <IndiaFlag />
-                            <span>India</span>
+                            <VietnamFlag />
+                            <span>VietNamese</span>
                         </Flex>
                         <Input
                             placeholder="Job title, keyword, company"

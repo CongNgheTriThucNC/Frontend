@@ -5,6 +5,7 @@ import axios from 'axios';
 import './login.scss';
 import { useUser } from '../../context';
 import { getMe } from '../../service/Apis/auth';
+import { BASE_URL } from '../../service/Apis/request';
 
 const Login = memo(() => {
     const { setToken, setUser } = useUser();
@@ -12,7 +13,7 @@ const Login = memo(() => {
 
     const onFinish = async (values) => {
         try {
-            const response = await axios.post('http://localhost:3000/api/auth/login', {
+            const response = await axios.post(BASE_URL + '/auth/login', {
                 email: values.email,
                 password: values.password,
             });
