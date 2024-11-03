@@ -1,6 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-const BASE_URL = 'http://localhost:3000/api';
+export const BASE_URL = 'http://localhost:3000/api';
 
 const request = axios.create({
   // Use the correct key for accessing the base URL
@@ -15,7 +15,6 @@ const request = axios.create({
 request.interceptors.request.use(
   function (config) {
     const accessToken = Cookies.get("token") || "";
-    console.log('cookie',accessToken);
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     } else {
