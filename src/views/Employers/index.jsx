@@ -240,11 +240,11 @@ const SingleEmployers = memo(() => {
             <div className="company-details-related">
                 <h2>Open Position(05)</h2>
                 <div className="company-related">
+                    {/* <JobItem link="/job-details" />
                     <JobItem link="/job-details" />
                     <JobItem link="/job-details" />
                     <JobItem link="/job-details" />
-                    <JobItem link="/job-details" />
-                    <JobItem link="/job-details" />
+                    <JobItem link="/job-details" /> */}
                 </div>
             </div>
         </>
