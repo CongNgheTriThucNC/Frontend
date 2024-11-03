@@ -19,7 +19,7 @@ import PinterestIcon from '../../assets/icons/PinterestIcon';
 import YoutubeIcon from '../../assets/icons/YoutubeIcon';
 import InstagramIcon from '../../assets/icons/InstagramIcon';
 import { useParams } from 'react-router-dom';
-import { getEmployerId } from '../../service/Apis/employer';
+import { getEmployerId, getJobByCompanyId } from '../../service/Apis/employer';
 
 const SingleEmployers = memo(() => {
     const [form] = Form.useForm();
@@ -27,12 +27,16 @@ const SingleEmployers = memo(() => {
     const { employerId } = useParams(); // Retrieve job ID from URL
     const [job, setJob] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [jobCompany, setJobCompany] = useState(null);
     useEffect(() => {
         const fetchJob = async () => {
             try {
                 setLoading(true); // Set loading to true before API call
                 const response = await getEmployerId(employerId);
+                // const responseCompany = await getJobByCompanyId(employerId, { page: 1, limit: 4 });
+                // setJobCompany(responseCompany.data);
                 setJob(response.data);
+                console.log(jobCompany);
             } catch (error) {
                 console.error("Error fetching job:", error);
                 console.error("Failed to fetch job details. Please try again later."); // Show user-friendly error message
@@ -47,7 +51,7 @@ const SingleEmployers = memo(() => {
             console.error("Invalid job ID.");
             setLoading(false);
         }
-    }, [employerId]);
+    }, [employerId, jobCompany]);
 
     if (loading) {
         return (

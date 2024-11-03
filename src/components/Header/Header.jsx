@@ -34,7 +34,7 @@ const Header = memo(() => {
                     <Flex align="center" gap={24} className="left-content">
                         <Link to="/">Home</Link>
                         <Link to="/find-job">Find Job</Link>
-                        <Link to="/find-employer">Find Employers</Link>
+                        <Link to="/#">Find Employers</Link>
                         <Link to="">Dashboard</Link>
                         <Link to="">Job Alerts</Link>
                         <Link to="">Customer Supports</Link>
