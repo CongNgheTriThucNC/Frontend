@@ -41,9 +41,7 @@ export default function FindAJob() {
             src="https://ngs-sur.com/wp-content/uploads/2023/11/CTA-foto.png"
           />
         </div>
-
       </div>
-
       <div className="flex gap-5 justify-start ">
         <BoxFindJob so={"1,75,324"} chu={"Live Job"} imgSrc="https://th.bing.com/th/id/OIP.aoh-dxspLpdeqTIk2OLbEAAAAA?pid=ImgDet&w=150&h=150&c=7&dpr=1.3" />
         <BoxFindJob so={"97,354"} chu={"Companies"} imgSrc="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5U5GnqlufyNzHWuMnisFa9u9wYTvJKPnEDIM43CBE-IP_kN3-" />
