@@ -10,11 +10,14 @@ import './header.scss';
 import { useUser } from '../../context';
 import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
-
+import { getJobs } from '../../service/Apis/job';
+import { useState } from 'react';
+import { useSearch } from '../../context/SearchContext';
 const Header = memo(() => {
+    const [ currentSearch, setCurrentSearch ] = useState();
+    const { searchQuery, setSearchQuery } = useSearch();
     const { user, logout } = useUser();
     const navigate = useNavigate();
-
     const handleProfileClick = () => {
         if (!user) {
             navigate('/login');
@@ -26,7 +29,14 @@ const Header = memo(() => {
         logout();  // Clear user session and token
         navigate('/');  // Redirect to home page
     };
-
+    const handleSearchInput = (e) => {
+        setCurrentSearch(e.target.value);
+    };
+    const handleSearchEnter = (e) => {
+        if (e.key === 'Enter') {
+            setSearchQuery(currentSearch);
+        }
+    };
     return (
         <>
             <div className="header">
@@ -62,6 +72,9 @@ const Header = memo(() => {
                         <Input
                             placeholder="Job title, keyword, company"
                             prefix={<IconSearch />}
+                            value={currentSearch}
+                            onChange={handleSearchInput}
+                            onKeyDown={handleSearchEnter}
                         />
                     </Flex>
                 </Flex>

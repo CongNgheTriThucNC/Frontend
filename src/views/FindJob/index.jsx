@@ -9,8 +9,9 @@ import JobItem from '../../components/JobItem/JobItem';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import { getJobs } from '../../service/Apis/job';
-
+import { useSearch } from '../../context/SearchContext';
 const FindJob = memo(() => {
+   
     const [jobs, setJobs] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalJobs, setTotalJobs] = useState(0);
@@ -20,7 +21,7 @@ const FindJob = memo(() => {
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-
+    const { searchQuery } = useSearch();
     const fetchJobs = useCallback(async (page = 1) => {
         setLoading(true);
         setError(null);
@@ -30,7 +31,8 @@ const FindJob = memo(() => {
                 salary: salary, 
                 jobLevel: jobLevel, 
                 page: page,
-                limit: 9
+                limit: 9,
+                Query: searchQuery,
             };
             const response = await getJobs(params);
             setJobs(response.data.docs);
@@ -41,7 +43,7 @@ const FindJob = memo(() => {
         } finally {
             setLoading(false);
         }
-    }, [experienceValue, salary, jobLevel]);
+    }, [experienceValue, salary, jobLevel, searchQuery]);
 
     useEffect(() => {
         fetchJobs(currentPage);
