@@ -1,4 +1,4 @@
-import { Button, Flex, Form, Input, Modal } from 'antd';
+import { Button, Flex, Form, Spin, Modal } from 'antd';
 import React, { memo, useState } from 'react';
 import { IconCalendar } from '../../assets/icons/IconCalendar';
 import { IconClock } from '../../assets/icons/IconClock';
@@ -8,6 +8,7 @@ import { IconMail } from '../../assets/icons/IconMail';
 import { IconPhone } from '../../assets/icons/IconPhone';
 import { IconSalary } from '../../assets/icons/IconSalary';
 import './singleEmployers.scss';
+import { useEffect } from 'react';
 import JobOverviewItem from '../JobDetails/JobOverviewItem';
 import ContactOverviewItem from './SingleEmployers';
 import JobItem from '../../components/JobItem/JobItem';
@@ -17,10 +18,56 @@ import TwitterIcon from '../../assets/icons/TwitterIcon';
 import PinterestIcon from '../../assets/icons/PinterestIcon';
 import YoutubeIcon from '../../assets/icons/YoutubeIcon';
 import InstagramIcon from '../../assets/icons/InstagramIcon';
+import { useParams } from 'react-router-dom';
+import { getEmployerId } from '../../service/Apis/employer';
 
 const SingleEmployers = memo(() => {
     const [form] = Form.useForm();
     const [open, setOpen] = useState(false);
+    const { employerId } = useParams(); // Retrieve job ID from URL
+    const [job, setJob] = useState(null);
+    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+        const fetchJob = async () => {
+            try {
+                setLoading(true); // Set loading to true before API call
+                const response = await getEmployerId(employerId);
+                setJob(response.data);
+            } catch (error) {
+                console.error("Error fetching job:", error);
+                console.error("Failed to fetch job details. Please try again later."); // Show user-friendly error message
+            } finally {
+                setLoading(false); // Set loading to false after API call
+            }
+        };
+        
+        if (employerId) {
+            fetchJob();
+        } else {
+            console.error("Invalid job ID.");
+            setLoading(false);
+        }
+    }, [employerId]);
+
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <div className="flex flex-col items-center">
+                    <Spin size="large" />
+                    <p className="mt-4 text-xl text-gray-600">Loading job details...</p>
+                </div>
+            </div>
+        );
+    }
+
+    if (!job) {
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <p className="text-xl text-red-600">No Employer details found.</p>
+            </div>
+        );
+    }
+
 
     return (
         <>
@@ -30,18 +77,22 @@ const SingleEmployers = memo(() => {
                     justify="space-between"
                     className="company-details-label"
                 >
-                    <h3>Single Employers</h3>
+                    {/* <h3>{job.CompanyName}</h3> */}
                     <span>Home / Find Job / Single Employers</span>
                 </Flex>
             </div>
             <Flex justify="space-between" className="company-details-content">
                 <Flex className="company-details-title" gap={24} flex={1}>
                     <div>
-                        <IconInstagram />
+                    <img 
+                        src={job.CompanyImageURL} 
+                        alt={`${job.CompanyName} logo`} 
+                        className="company-logo" 
+                    />
                     </div>
                     <Flex justify="space-around" vertical>
                         <Flex className="company-title" align="center" gap={12}>
-                            <h4>Twitter</h4>
+                            <h4>{job.CompanyName}</h4>
                         </Flex>
                         <Flex align="center" gap={12}>
                             <Flex align="center" gap={8}>
@@ -71,26 +122,7 @@ const SingleEmployers = memo(() => {
                 <div className="company-description">
                     <h3>Description</h3>
                     <p>
-                        Fusce et erat at nibh maximus fermentum. Mauris ac justo
-                        nibh. Praesent nec lorem lorem. Donec ullamcorper lacus
-                        mollis tortor pretium malesuada. In quis porta nisi,
-                        quis fringilla orci. Donec porttitor, odio a efficitur
-                        blandit, orci nisl porta elit, eget vulputate quam nibh
-                        ut tellus. Sed ut posuere risus, vitae commodo velit.
-                        Nullam in lorem dolor. Class aptent taciti sociosquad
-                        litora torquent per conubia nostra, per inceptos
-                        himenaeos. Vestibulum ante ipsum primis in faucibus orci
-                        luctus et ultrices posuere cubilia curae; Nulla
-                        tincidunt ac quam quis vehicula. Quisque sagittis
-                        ullamcorper magna. Vivamus elementum eu leo et gravida.
-                        Sed dignissim placerat diam, ac laoreet eros rutrum sit
-                        amet. Donec imperdiet in leo et imperdiet. In hac
-                        habitasse platea dictumst. Sed quis nisl molestie diam
-                        ullamcorper condimentum. Sed aliquet, arcu eget pretium
-                        bibendum, odio enim rutrum arcu, quis suscipit mauris
-                        turpis in neque. Vestibulum id vestibulum odio. Sed
-                        dolor felis, iaculis eget turpis eu, lobortis imperdiet
-                        massa.
+                       {job.CompanyOverview}
                     </p>
                     <br></br>
                     <div className="company-list-items">
@@ -167,8 +199,8 @@ const SingleEmployers = memo(() => {
                                 />
                                 <JobOverviewItem
                                     icon={<IconSalary />}
-                                    label="team size"
-                                    data="120-300 Candidates"
+                                    label="Team Size"
+                                    data={`${job.CompanySize} Candidates`} // Fixed syntax
                                 />
                                 <JobOverviewItem
                                     icon={<IconEducation />}
@@ -210,8 +242,8 @@ const SingleEmployers = memo(() => {
                                 <hr></hr>
                                 <ContactOverviewItem
                                     icon={<IconMail />}
-                                    label="email address"
-                                    data="esther.howard@gmail.com"
+                                    label="Address"
+                                    data={job.CompanyAddress}
                                 />
                             </Flex>
                         </Flex>

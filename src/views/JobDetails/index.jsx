@@ -1,5 +1,5 @@
-import { Button, Flex, Form, Input, Modal } from 'antd';
-import React, { memo, useState } from 'react';
+import { Button, Flex, Form, Input, Modal,Spin } from 'antd';
+import React, { memo, useEffect, useState } from 'react';
 import { IconCalendar } from '../../assets/icons/IconCalendar';
 import { IconClock } from '../../assets/icons/IconClock';
 import { IconEducation } from '../../assets/icons/IconEducation';
@@ -14,10 +14,56 @@ import { IconSave } from '../../assets/icons/IconSave';
 import './jobDetails.scss';
 import JobOverviewItem from './JobOverviewItem';
 import JobItem from '../../components/JobItem/JobItem';
+import { useParams, useNavigate } from 'react-router-dom';
+import { getJobById } from '../../service/Apis/job';
 
 const JobDetails = memo(() => {
     const [form] = Form.useForm();
     const [open, setOpen] = useState(false);
+    const { jobId } = useParams(); // Retrieve job ID from URL
+    const [job, setJob] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+    useEffect(() => {
+        const fetchJob = async () => {
+            try {
+                setLoading(true); // Set loading to true before API call
+                const response = await getJobById(jobId);
+                setJob(response.data);
+            } catch (error) {
+                console.error("Error fetching job:", error);
+                console.error("Failed to fetch job details. Please try again later."); // Show user-friendly error message
+            } finally {
+                setLoading(false); // Set loading to false after API call
+            }
+        };
+        
+        if (jobId) {
+            fetchJob();
+        } else {
+            console.error("Invalid job ID.");
+            setLoading(false);
+        }
+    }, [jobId]);
+
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <div className="flex flex-col items-center">
+                    <Spin size="large" />
+                    <p className="mt-4 text-xl text-gray-600">Loading job details...</p>
+                </div>
+            </div>
+        );
+    }
+
+    if (!job) {
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <p className="text-xl text-red-600">No job details found.</p>
+            </div>
+        );
+    }
 
     return (
         <>
@@ -35,14 +81,19 @@ const JobDetails = memo(() => {
             </div>
             <Flex justify="space-between" className="job-details-content">
                 <Flex className="job-details-title" gap={24} flex={1}>
-                    <div>
-                        <IconInstagram />
+                    <div className='cursor-pointer'>
+                    <img 
+                        src={job.CompanyImageURL} 
+                        alt={`${job.CompanyName} logo`} 
+                        className="company-logo" 
+                        onClick={() => navigate(`/find-employer/${job.CompanyID}`)}
+                    />
                     </div>
                     <Flex justify="space-around" vertical>
                         <Flex className="job-title" align="center" gap={12}>
-                            <h4>Senior UX Designer</h4>
+                            <h4>{job.JobTitle}</h4>
                             <span className="featured">Featured</span>
-                            <span className="fullTime">Full Time</span>
+                            <span className="fullTime">{job.JobType}</span>
                         </Flex>
                         <Flex align="center" gap={12}>
                             <Flex align="center" gap={8}>
@@ -81,7 +132,7 @@ const JobDetails = memo(() => {
                         justify="flex-end"
                     >
                         <span>Job expire in:</span>
-                        <span> June 30, 2021</span>
+                        <span> {job.SubmissionDeadline.year} - {job.SubmissionDeadline.month} - {job.SubmissionDeadline.day} </span>
                     </Flex>
                 </Flex>
             </Flex>
@@ -93,27 +144,11 @@ const JobDetails = memo(() => {
                 <div className="job-description">
                     <h3>Job Description</h3>
                     <p>
-                        Integer aliquet pretium consequat. Donec et sapien id
-                        leo accumsan pellentesque eget maximus tellus. Duis et
-                        est ac leo rhoncus tincidunt vitae vehicula augue. Donec
-                        in suscipit diam. Pellentesque quis justo sit amet arcu
-                        commodo sollicitudin. Integer finibus blandit
-                        condimentum. Vivamus sit amet ligula ullamcorper,
-                        pulvinar ante id, tristique erat. Quisque sit amet
-                        aliquam urna. Maecenas blandit felis id massa sodales
-                        finibus. Integer bibendum eu nulla eu sollicitudin. Sed
-                        lobortis diam tincidunt accumsan faucibus. Quisque
-                        blandit augue quis turpis auctor, dapibus euismod ante
-                        ultricies. Ut non felis lacinia turpis feugiat euismod
-                        at id magna. Sed ut orci arcu. Suspendisse sollicitudin
-                        faucibus aliquet.
+                        {job.JobDescription}
                     </p>
+                    <h3>Job Benefits</h3>
                     <p>
-                        Nam dapibus consectetur erat in euismod. Cras urna
-                        augue, mollis venenatis augue sed, porttitor aliquet
-                        nibh. Sed tristique dictum elementum. Nulla imperdiet
-                        sit amet quam eget lobortis. Etiam in neque sit amet
-                        orci interdum tincidunt.
+                        {job.Benefits}
                     </p>
                     <div className="job-list-items">
                         <h3>Responsibilities</h3>
@@ -170,12 +205,12 @@ const JobDetails = memo(() => {
                                 <JobOverviewItem
                                     icon={<IconSalary />}
                                     label="salery"
-                                    data="$50k-80k/month"
+                                    data={job.Salary}
                                 />
                                 <JobOverviewItem
                                     icon={<IconLocationBig />}
                                     label="location"
-                                    data="New York, USA"
+                                    data= {job.JobAddress}
                                 />
                                 <JobOverviewItem
                                     icon={<IconEducation />}
@@ -185,15 +220,22 @@ const JobDetails = memo(() => {
                                 <JobOverviewItem
                                     icon={<IconEducation />}
                                     label="experience"
-                                    data="10-15 Years"
+                                    data={job.YearsofExperience}
                                 />
                             </div>
                         </div>
                         <Flex vertical gap={20} className="social-overview">
                             <Flex gap={12} align="center">
-                                <IconInstagramBorder />
+                            <div>
+                    <img 
+                        src={job.CompanyImageURL} 
+                        alt={`${job.CompanyName} logo`} 
+                        className="company-logo" 
+                        onClick={() => navigate(`/find-employer/${job.CompanyID}`)}
+                    />
+                    </div>
                                 <Flex vertical gap={12} className="social-name">
-                                    <h3>Instagram</h3>
+                                    <h3>{job.CompanyName}</h3>
                                     <p>Social networking service</p>
                                 </Flex>
                             </Flex>
@@ -224,7 +266,7 @@ const JobDetails = memo(() => {
                                     className="social-overview-infor-item"
                                 >
                                     <span>Company size:</span>
-                                    <span>120-300 Employers</span>
+                                    <span>{job.CompanySize} Employers</span>
                                 </Flex>
                                 <Flex
                                     align="center"
@@ -247,8 +289,8 @@ const JobDetails = memo(() => {
                                     justify="space-between"
                                     className="social-overview-infor-item"
                                 >
-                                    <span>Website:</span>
-                                    <span>https://twitter.com</span>
+                                    <span>Address:</span>
+                                    <span>{job.JobAddress}</span>
                                 </Flex>
                             </Flex>
                         </Flex>

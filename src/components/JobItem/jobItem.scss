@@ -60,3 +60,10 @@
         }
     }
 }
+
+.company-logo {
+    width: 40px;  /* Adjust width as needed */
+    height: 40px; /* Adjust height as needed */
+    object-fit: cover;
+    border-radius: 4px; /* Optional: add some border-radius for a rounded look */
+}

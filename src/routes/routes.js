@@ -20,14 +20,13 @@ export default function RouteComponent() {
                 <FindJobLayout>
                     <Home />
                 </FindJobLayout>
-             
             ),
         },
         {
             path: '/login',
             element: (
                 <RegisterLayout>
-                    <Login />,
+                    <Login />
                 </RegisterLayout>
             ),
         },
@@ -49,11 +48,7 @@ export default function RouteComponent() {
         },
         {
             path: '/reset-password',
-            element: (
-                <>
-                    <ResetPassword />,
-                </>
-            ),
+            element: <ResetPassword />,
         },
         {
             path: '/find-job',
@@ -61,18 +56,18 @@ export default function RouteComponent() {
                 <FindJobLayout>
                     <FindJob />
                 </FindJobLayout>
-            )
+            ),
         },
         {
-            path: '/find-employer',
+            path: '/find-employer/:employerId',
             element: (
                 <FindJobLayout>
                     <SingleEmployers />
                 </FindJobLayout>
-            )
+            ),
         },
         {
-            path: '/job-details',
+            path: '/job-details/:jobId',
             element: (
                 <FindJobLayout>
                     <JobDetails />

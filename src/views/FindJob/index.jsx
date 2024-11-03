@@ -30,10 +30,11 @@ const FindJob = memo(() => {
                 salary: salary, 
                 jobLevel: jobLevel, 
                 page: page,
+                limit: 9
             };
             const response = await getJobs(params);
-            setJobs(response.data.docs); // Adjust according to your API response structure
-            setTotalJobs(response.data.totalDocs); // Total number of jobs, adjust according to your API response structure
+            setJobs(response.data.docs);
+            setTotalJobs(response.data.totalDocs);
         } catch (error) {
             console.error("Error fetching jobs:", error);
             setError("Failed to fetch jobs. Please try again later.");
@@ -46,143 +47,80 @@ const FindJob = memo(() => {
         fetchJobs(currentPage);
     }, [fetchJobs, currentPage]);
 
-    const experienceOptions = useMemo(() => [
-        { label: 'Freshers', value: 'freshers' },
-        { label: '1 - 2 Years', value: '1-2years' },
-        { label: '2 - 4 Years', value: '2-4years' },
-        { label: '4 - 6 Years', value: '4-6years' },
-        { label: '6 - 8 Years', value: '6-8years' },
-        { label: '8 - 10 Years', value: '8-10years' },
-        { label: '10 - 15 Years', value: '10-15years' },
-        { label: '15+ Years', value: '15+years' },
+    const companySizeOptions = useMemo(() => [
+        { label: '100-499', value: '100-499' },
+        { label: '25-99', value: '25-99' },
+        { label: '500-999', value: '500-999' },
+        { label: '1000-3000', value: '1000-3000' },
+        { label: '10-24', value: '10-24' },
+        { label: '3000+', value: '3000+' },
+        { label: '1-9', value: '1-9' },
     ], []);
 
-    const salaryOptions = useMemo(() => {
-        return [
-            {
-                label: '$50 - $1000',
-                value: '50-1000',
-            },
-            {
-                label: '$1000 - $2000',
-                value: '1000-2000',
-            },
-            {
-                label: '$3000 - $4000',
-                value: '3000-4000',
-            },
-            {
-                label: '$4000 - $6000',
-                value: '4000-6000',
-            },
-            {
-                label: '$6000 - $8000',
-                value: '6000-8000',
-            },
-            {
-                label: '$8000 - $10000',
-                value: '8000-10000',
-            },
-            {
-                label: '$10000 - $15000',
-                value: '10000-15000',
-            },
-            {
-                label: '$15000+',
-                value: '15000+',
-            },
-        ];
-    }, []);
-    const jobTypeOptions = useMemo(() => {
-        return [
-            {
-                label: 'All',
-                value: 'all',
-            },
-            {
-                label: 'Full Time',
-                value: 'fullTime',
-            },
-            {
-                label: 'Part Time',
-                value: 'partTime',
-            },
-            {
-                label: 'Internship',
-                value: 'internship',
-            },
-            {
-                label: 'Remote',
-                value: 'remote',
-            },
-            {
-                label: 'Temporary',
-                value: 'temporary',
-            },
-            {
-                label: 'Contract Base',
-                value: 'contractBase',
-            },
-        ];
-    }, []);
-    const educationOptions = useMemo(() => {
-        return [
-            {
-                label: 'All',
-                value: 'all',
-            },
-            {
-                label: 'High School',
-                value: 'highSchool',
-            },
-            {
-                label: 'Intermediate',
-                value: 'intermediate',
-            },
-            {
-                label: 'Graduation',
-                value: 'graduation',
-            },
-            {
-                label: 'Master Degree',
-                value: 'masterDegree',
-            },
-            {
-                label: 'Bachelor Degree',
-                value: 'bachelorDegree',
-            },
-        ];
-    }, []);
-    const jobLevelOptions = useMemo(() => {
-        return [
-            {
-                label: 'Entry Level',
-                value: 'entryLevel',
-            },
-            {
-                label: 'Mid Level',
-                value: 'midLevel',
-            },
-            {
-                label: 'Expert Level',
-                value: 'expertLevel',
-            },
-        ];
-    }, []);
+    const experienceOptions = useMemo(() => [
+        { label: 'Không yêu cầu kinh nghiệm', value: 'no-experience' },
+        { label: 'Dưới 1 năm', value: 'under-1-year' },
+        { label: '1-3 năm', value: '1-3-years' },
+        { label: '3-5 năm', value: '3-5-years' },
+        { label: '5-10 năm', value: '5-10-years' },
+        { label: 'Trên 10 năm', value: '10-plus-years' },
+    ], []);
+
+    const salaryOptions = useMemo(() => [
+        { label: 'Thỏa thuận', value: 'negotiable' },
+        { label: '5,000,000 - 10,000,000', value: '5000000-10000000' },
+        { label: '10,000,000 - 15,000,000', value: '10000000-15000000' },
+        { label: '15,000,000 - 20,000,000', value: '15000000-20000000' },
+        { label: '20,000,000 - 40,000,000', value: '20000000-40000000' },
+        { label: '1,000,000 - 5,000,000', value: '1000000-5000000' },
+        { label: 'Trên 40,000,000', value: '40000000-plus' },
+    ], []);
+
+    const jobTypeOptions = useMemo(() => [
+        { label: 'Full time', value: 'fullTime' },
+        { label: 'Part time', value: 'partTime' },
+        { label: 'Internship', value: 'internship' },
+        { label: 'Remote', value: 'remote' },
+        { label: 'Others', value: 'others' },
+    ], []);
+
+    const educationOptions = useMemo(() => [
+        { label: 'Đại học', value: 'bachelor' },
+        { label: 'Cao đẳng', value: 'college' },
+        { label: 'Năm 3', value: 'year3' },
+        { label: 'Năm 4', value: 'year4' },
+        { label: 'Tốt nghiệp', value: 'graduate' },
+    ], []);
+
+    const jobLevelOptions = useMemo(() => [
+        { label: 'Trưởng nhóm', value: 'teamLead' },
+        { label: 'Trưởng/Phó phòng', value: 'departmentHead' },
+        { label: 'Nhân viên', value: 'staff' },
+        { label: 'Thực tập sinh', value: 'intern' },
+        { label: 'Quản lý / Giám sát', value: 'manager' },
+    ], []);
+
+    const locationOptions = useMemo(() => [
+        { label: 'Hà Nội', value: 'hanoi' },
+        { label: 'Hồ Chí Minh', value: 'hochiminh' },
+        { label: 'Bình Dương', value: 'binhduong' },
+        { label: 'Đà Nẵng', value: 'danang' },
+        { label: 'Đồng Nai', value: 'dongnai' },
+    ], []);
 
     const onExperienceChange = e => {
         setExperienceValue(e.target.value);
-        setCurrentPage(1); // Reset to first page on filter change
+        setCurrentPage(1);
     };
 
     const onSalaryChange = e => {
         setSalary(e.target.value);
-        setCurrentPage(1); // Reset to first page on filter change
+        setCurrentPage(1);
     };
 
     const onJobLevelChange = e => {
         setJobLevel(e.target.value);
-        setCurrentPage(1); // Reset to first page on filter change
+        setCurrentPage(1);
     };
 
     const toggleDropdown = useCallback(() => {
@@ -200,12 +138,7 @@ const FindJob = memo(() => {
                     <Typography.Title level={3}>Find Job</Typography.Title>
                 </Flex>
                 <div className="find-job-details">
-                    <Form
-                        name="basic"
-                        layout="vertical"
-                        autoComplete="off"
-                        className="form-find-job"
-                    >
+                    <Form name="basic" layout="vertical" autoComplete="off" className="form-find-job">
                         <Form.Item name="job">
                             <Input placeholder="Job title, Keyword..." prefix={<IconSearch />} />
                         </Form.Item>
@@ -228,54 +161,32 @@ const FindJob = memo(() => {
                         <div className="dropdown--menu">
                             <div className="dropdown--item">
                                 <Typography.Title level={4}>Experience</Typography.Title>
-                                <Radio.Group
-                                    options={experienceOptions}
-                                    onChange={onExperienceChange}
-                                    value={experienceValue}
-                                    className="options--group"
-                                />
+                                <Radio.Group options={experienceOptions} onChange={onExperienceChange} value={experienceValue} className="options--group" />
                             </div>
                             <div className="dropdown--item">
-                                <Typography.Title level={4}>
-                                    Salary
-                                </Typography.Title>
-                                <Radio.Group
-                                    options={salaryOptions}
-                                    onChange={onSalaryChange}
-                                    value={salary}
-                                    className="options--group"
-                                />
+                                <Typography.Title level={4}>Salary</Typography.Title>
+                                <Radio.Group options={salaryOptions} onChange={onSalaryChange} value={salary} className="options--group" />
                             </div>
                             <div className="dropdown--item">
-                                <Typography.Title level={4}>
-                                    Job Type
-                                </Typography.Title>
-                                <Checkbox.Group
-                                    options={jobTypeOptions}
-                                    className="options--group"
-                                />
+                                <Typography.Title level={4}>Job Type</Typography.Title>
+                                <Checkbox.Group options={jobTypeOptions} className="options--group" />
                             </div>
                             <div className="dropdown--item">
-                                <Typography.Title level={4}>
-                                    Education
-                                </Typography.Title>
-                                <Checkbox.Group
-                                    options={educationOptions}
-                                    className="options--group"
-                                />
+                                <Typography.Title level={4}>Education</Typography.Title>
+                                <Checkbox.Group options={educationOptions} className="options--group" />
                             </div>
                             <div className="dropdown--item">
-                                <Typography.Title level={4}>
-                                    Job Level
-                                </Typography.Title>
-                                <Radio.Group
-                                    options={jobLevelOptions}
-                                    onChange={onJobLevelChange}
-                                    value={jobLevel}
-                                    className="options--group"
-                                />
+                                <Typography.Title level={4}>Job Level</Typography.Title>
+                                <Radio.Group options={jobLevelOptions} onChange={onJobLevelChange} value={jobLevel} className="options--group" />
                             </div>
-                            
+                            <div className="dropdown--item">
+                                <Typography.Title level={4}>Location</Typography.Title>
+                                <Checkbox.Group options={locationOptions} className="options--group" />
+                            </div>
+                            <div className="dropdown--item">
+                                <Typography.Title level={4}>ComPany size</Typography.Title>
+                                <Checkbox.Group options={companySizeOptions} className="options--group" />
+                            </div>
                         </div>
                     )}
                 </div>
@@ -283,23 +194,12 @@ const FindJob = memo(() => {
             <div className="find-job-alls">
                 {loading && <Typography.Text>Loading jobs...</Typography.Text>}
                 {error && <Typography.Text type="danger">{error}</Typography.Text>}
-                {jobs.length > 0 ? (
-                    jobs.map((job, index) => (
-                        <JobItem key={index} link="/job-details" job={job} />
-                    ))
-                ) : (
-                    !loading && <Typography.Text>No jobs found.</Typography.Text>
-                )}
+                {jobs.map((job, index) => <JobItem key={index} job={job} />)}
+
             </div>
             <div className="flex justify-center items-center">
                 <Stack spacing={2}>
-                    <Pagination
-                        count={Math.ceil(totalJobs / 10)} // Adjust this based on your pagination logic
-                        page={currentPage}
-                        onChange={handlePageChange}
-                        variant="outlined"
-                        shape="rounded"
-                    />
+                    <Pagination count={Math.ceil(totalJobs / 9)} page={currentPage} onChange={handlePageChange} />
                 </Stack>
             </div>
         </>
