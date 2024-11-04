@@ -30,7 +30,11 @@ const Header = memo(() => {
         navigate('/');  // Redirect to home page
     };
     const handleSearchInput = (e) => {
-        setCurrentSearch(e.target.value);
+        const value = e.target.value;
+        setCurrentSearch(value);
+        if (value === '') {
+            setSearchQuery('');  // Set search data to empty
+        }
     };
     const handleSearchEnter = (e) => {
         if (e.key === 'Enter') {
