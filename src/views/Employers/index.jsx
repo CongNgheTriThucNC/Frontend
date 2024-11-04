@@ -1,9 +1,9 @@
-import { Button, Flex, Form, Spin, Modal } from 'antd';
-import React, { memo, useState } from 'react';
+import { Button, Flex, Form, Spin, Typography } from 'antd';
+import React, {useRef, memo, useState } from 'react';
 import { IconCalendar } from '../../assets/icons/IconCalendar';
 import { IconClock } from '../../assets/icons/IconClock';
 import { IconEducation } from '../../assets/icons/IconEducation';
-import { IconInstagram } from '../../assets/icons/IconInstagram';
+// import { IconInstagram } from '../../assets/icons/IconInstagram';
 import { IconMail } from '../../assets/icons/IconMail';
 import { IconPhone } from '../../assets/icons/IconPhone';
 import { IconSalary } from '../../assets/icons/IconSalary';
@@ -20,46 +20,79 @@ import YoutubeIcon from '../../assets/icons/YoutubeIcon';
 import InstagramIcon from '../../assets/icons/InstagramIcon';
 import { useParams } from 'react-router-dom';
 import { getEmployerId, getJobByCompanyId } from '../../service/Apis/employer';
-
+import Stack from '@mui/material/Stack';
+import Pagination from '@mui/material/Pagination';
 const SingleEmployers = memo(() => {
+    const positionRef = useRef(null);
+
+    const scrollToPosition = () => {
+        if (positionRef.current) {
+            positionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    };
+    const [totalJobs, setTotalJobs] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
     const [form] = Form.useForm();
-    const [open, setOpen] = useState(false);
-    const { employerId } = useParams(); // Retrieve job ID from URL
+    const { employerId } = useParams();
     const [job, setJob] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [jobCompany, setJobCompany] = useState(null);
+    const [jobCompany, setJobCompany] = useState([]);
+    const [error, setError] = useState(null);
+
+    // Fetch employer details once on mount
     useEffect(() => {
-        const fetchJob = async () => {
+        const fetchEmployerDetails = async () => {
+            setError(null);
             try {
-                setLoading(true); // Set loading to true before API call
-                const response = await getEmployerId(employerId);
-                // const responseCompany = await getJobByCompanyId(employerId, { page: 1, limit: 4 });
-                // setJobCompany(responseCompany.data);
-                setJob(response.data);
-                console.log(jobCompany);
+                const jobResponse = await getEmployerId(employerId);
+                setJob(jobResponse.data);
             } catch (error) {
-                console.error("Error fetching job:", error);
-                console.error("Failed to fetch job details. Please try again later."); // Show user-friendly error message
-            } finally {
-                setLoading(false); // Set loading to false after API call
+                console.error("Error fetching employer details:", error);
+                setError("Failed to fetch employer details.");
             }
         };
         
         if (employerId) {
-            fetchJob();
+            fetchEmployerDetails();
         } else {
-            console.error("Invalid job ID.");
-            setLoading(false);
+            console.error("Invalid employer ID.");
         }
-    }, [employerId, jobCompany]);
+    }, [employerId]);
 
-    if (loading) {
+    // Fetch job listings when currentPage or employerId changes
+    useEffect(() => {
+        const fetchJobListings = async () => {
+            setError(null);
+            setLoading(true);
+            try {
+                const jobCompanyResponse = await getJobByCompanyId(employerId, { page: currentPage, limit: 3 });
+                console.log("jobCompanyResponse", jobCompanyResponse);
+                setJobCompany(jobCompanyResponse.data.docs);
+                setTotalJobs(jobCompanyResponse.data.totalDocs);
+            } catch (error) {
+                console.error("Error fetching job listings:", error);
+                setError("Failed to fetch job listings. Please try again later.");
+            } finally {
+                setLoading(false);
+            }
+        };
+        
+        if (employerId) {
+            fetchJobListings();
+        }
+    }, [employerId, currentPage]);
+    console.log("current page", currentPage);
+    console.log("total jobs", totalJobs);
+
+    const handlePageChange = (event, value) => {
+        setCurrentPage(value);
+    };
+
+    if (loading && !job) {
         return (
             <div className="flex items-center justify-center h-screen">
-                <div className="flex flex-col items-center">
-                    <Spin size="large" />
-                    <p className="mt-4 text-xl text-gray-600">Loading job details...</p>
-                </div>
+                <Spin size="large" />
+                <p className="mt-4 text-xl text-gray-600">Loading job details...</p>
             </div>
         );
     }
@@ -112,7 +145,7 @@ const SingleEmployers = memo(() => {
                     className="apply-btn"
                 >
                     <Flex align="center" gap={12}>
-                        <Button type="primary" onClick={() => setOpen(true)}>
+                        <Button type="primary" onClick={scrollToPosition}>
                             View Open Position
                         </Button>
                     </Flex>
@@ -273,15 +306,18 @@ const SingleEmployers = memo(() => {
             </Flex>
             <br></br>
             <hr></hr>
-            <div className="company-details-related">
-                <h2>Open Position(05)</h2>
+            <div className="company-details-related" ref={positionRef} id='position'>
+                <h2>Open Position</h2>
                 <div className="company-related">
-                    {/* <JobItem link="/job-details" />
-                    <JobItem link="/job-details" />
-                    <JobItem link="/job-details" />
-                    <JobItem link="/job-details" />
-                    <JobItem link="/job-details" /> */}
+                {loading && <Typography.Text>Loading jobs...</Typography.Text>}
+                {error && <Typography.Text type="danger">{error}</Typography.Text>}
+                {jobCompany.map((jobCompany, index) => <JobItem key={index} job={jobCompany} />)}
                 </div>
+            </div>
+            <div className="flex justify-center items-center">
+                <Stack spacing={2}>
+                    <Pagination count={Math.ceil(totalJobs / 3)} page={currentPage} onChange={handlePageChange} />
+                </Stack>
             </div>
         </>
     );

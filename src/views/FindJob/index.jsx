@@ -1,6 +1,6 @@
 import React, { memo, useCallback, useMemo, useState, useEffect } from 'react';
 import './findJob.scss';
-import { Button, Checkbox, Flex, Form, Input, Radio, Typography } from 'antd';
+import { Button, Checkbox, Flex, Form, Input, Radio, Typography,Spin } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { IconSearch } from '../../assets/icons/IconSearch';
 import { IconLocation } from '../../assets/icons/IconLocation';
@@ -194,10 +194,15 @@ const FindJob = memo(() => {
                 </div>
             </div>
             <div className="find-job-alls">
-                {loading && <Typography.Text>Loading jobs...</Typography.Text>}
-                {error && <Typography.Text type="danger">{error}</Typography.Text>}
-                {jobs.map((job, index) => <JobItem key={index} job={job} />)}
-
+                {loading ? (
+                    <div className="loading-container">
+                        <Spin size="large" /> {/* Display spinner */}
+                    </div>
+                ) : error ? (
+                    <Typography.Text type="danger">{error}</Typography.Text>
+                ) : (
+                    jobs.map((job, index) => <JobItem key={index} job={job} />)
+                )}
             </div>
             <div className="flex justify-center items-center">
                 <Stack spacing={2}>
