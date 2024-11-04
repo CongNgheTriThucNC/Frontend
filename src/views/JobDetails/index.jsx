@@ -1,10 +1,8 @@
-import { Button, Flex, Form, Input, Modal,Spin } from 'antd';
+import { Button, Flex, Form, Input, Modal,Spin,Typography } from 'antd';
 import React, { memo, useEffect, useState } from 'react';
 import { IconCalendar } from '../../assets/icons/IconCalendar';
 import { IconClock } from '../../assets/icons/IconClock';
 import { IconEducation } from '../../assets/icons/IconEducation';
-import { IconInstagram } from '../../assets/icons/IconInstagram';
-import { IconInstagramBorder } from '../../assets/icons/IconInstagramBorder';
 import { IconLink } from '../../assets/icons/IconLink';
 import { IconLocationBig } from '../../assets/icons/IconLocationBig';
 import { IconMail } from '../../assets/icons/IconMail';
@@ -17,12 +15,15 @@ import JobItem from '../../components/JobItem/JobItem';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getJobById } from '../../service/Apis/job';
 
+
 const JobDetails = memo(() => {
+    const [error, setError] = useState(null);
     const [form] = Form.useForm();
     const [open, setOpen] = useState(false);
     const { jobId } = useParams(); // Retrieve job ID from URL
     const [job, setJob] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [relatedJobs, setRelatedJobs] = useState([]);
     const navigate = useNavigate();
     useEffect(() => {
         const fetchJob = async () => {
@@ -30,6 +31,7 @@ const JobDetails = memo(() => {
                 setLoading(true); // Set loading to true before API call
                 const response = await getJobById(jobId);
                 setJob(response.data);
+                setRelatedJobs(response.data.RelatedJobs);
             } catch (error) {
                 console.error("Error fetching job:", error);
                 console.error("Failed to fetch job details. Please try again later."); // Show user-friendly error message
@@ -45,7 +47,6 @@ const JobDetails = memo(() => {
             setLoading(false);
         }
     }, [jobId]);
-
     if (loading) {
         return (
             <div className="flex items-center justify-center h-screen">
@@ -300,9 +301,15 @@ const JobDetails = memo(() => {
             <div className="job-details-related">
                 <h2>Related Jobs</h2>
                 <div className="job-related">
-                    <JobItem link="/job-details" />
-                    <JobItem link="/job-details" />
-                    <JobItem link="/job-details" />
+                {loading ? (
+                    <div className="loading-container">
+                        <Spin size="large" /> {/* Display spinner */}
+                    </div>
+                ) : error ? (
+                    <Typography.Text type="danger">{error}</Typography.Text>
+                ) : (
+                    relatedJobs.map((relatedJobs, index) => <JobItem key={index} job={relatedJobs} />)
+                )}
                 </div>
             </div>
             <Modal

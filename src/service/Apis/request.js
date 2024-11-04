@@ -1,8 +1,9 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 // export const BASE_URL = 'http://localhost:3000/api';
+export const BASE_URL = 'http://3.107.159.28:3000/api';
 
-export const BASE_URL = 'http://18.218.38.71:3000/api';
+// export const BASE_URL = 'http://18.218.38.71:3000/api';
 const request = axios.create({
   // Use the correct key for accessing the base URL
   baseURL: BASE_URL, 

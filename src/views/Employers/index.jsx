@@ -1,9 +1,8 @@
-import { Button, Flex, Form, Spin, Typography } from 'antd';
+import { Button, Flex, Spin, Typography } from 'antd';
 import React, {useRef, memo, useState } from 'react';
 import { IconCalendar } from '../../assets/icons/IconCalendar';
 import { IconClock } from '../../assets/icons/IconClock';
 import { IconEducation } from '../../assets/icons/IconEducation';
-// import { IconInstagram } from '../../assets/icons/IconInstagram';
 import { IconMail } from '../../assets/icons/IconMail';
 import { IconPhone } from '../../assets/icons/IconPhone';
 import { IconSalary } from '../../assets/icons/IconSalary';
@@ -32,7 +31,6 @@ const SingleEmployers = memo(() => {
     };
     const [totalJobs, setTotalJobs] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
-    const [form] = Form.useForm();
     const { employerId } = useParams();
     const [job, setJob] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -66,7 +64,6 @@ const SingleEmployers = memo(() => {
             setLoading(true);
             try {
                 const jobCompanyResponse = await getJobByCompanyId(employerId, { page: currentPage, limit: 3 });
-                console.log("jobCompanyResponse", jobCompanyResponse);
                 setJobCompany(jobCompanyResponse.data.docs);
                 setTotalJobs(jobCompanyResponse.data.totalDocs);
             } catch (error) {
@@ -81,8 +78,6 @@ const SingleEmployers = memo(() => {
             fetchJobListings();
         }
     }, [employerId, currentPage]);
-    console.log("current page", currentPage);
-    console.log("total jobs", totalJobs);
 
     const handlePageChange = (event, value) => {
         setCurrentPage(value);
